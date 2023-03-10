@@ -1,0 +1,37 @@
+version: "3"
+services:
+    if-cloud-db:
+        container_name: "if-cloud-db"
+        build: "db"
+        image: "michaelrk02/if-cloud-db"
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_USER: "if_cloud_db"
+            POSTGRES_PASSWORD: "if_cloud_db"
+            POSTGRES_DB: "if_cloud_db"
+            PGDATA: "/var/lib/postgresql/data/pgdata"
+        volumes:
+            - "./db/storage:/var/lib/postgresql/data"
+        networks:
+            - "if-cloud"
+    if-cloud-api:
+        container_name: "if-cloud-api"
+        build: "api"
+        image: "michaelrk02/if-cloud-api"
+        ports:
+            - "8080:8080"
+        env_file:
+            - "api/.env"
+        networks:
+            - "if-cloud"
+    if-cloud-app:
+        container_name: "if-cloud-app"
+        build: "app"
+        image: "michaelrk02/if-cloud-app"
+        ports:
+            - "3000:3000"
+        networks:
+            - "if-cloud"
+networks:
+    if-cloud:
